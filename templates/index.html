@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🛡️ AI Video Surveillance System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: #ecf0f1;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            color: #e74c3c;
+            margin: 0 0 10px 0;
+            font-size: 2.2em;
+        }
+        .subtitle {
+            color: #bdc3c7;
+            font-size: 1.1em;
+        }
+        .status-bar {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        .status-dot.active { background: #2ecc71; }
+        .status-dot.inactive { background: #e74c3c; }
+        .status-dot.warning { background: #f39c12; }
+        
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 25px;
+            margin-top: 25px;
+        }
+        @media (max-width: 1100px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+        }
+        .section-title {
+            color: #3498db;
+            font-size: 1.4em;
+            margin: 0 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(52, 152, 219, 0.3);
+        }
+        
+        /* Upload Section */
+        .upload-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .file-input-wrapper {
+            position: relative;
+            border: 2px dashed #3498db;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .file-input-wrapper:hover {
+            border-color: #2ecc71;
+            background: rgba(46, 204, 113, 0.1);
+        }
+        .file-input-wrapper input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+        .file-input-wrapper .icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: white;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(46, 204, 113, 0.4);
+        }
+        .btn-secondary {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+        }
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(52, 152, 219, 0.4);
+        }
+        .btn-danger {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+        }
+        
+        /* Webcam Button */
+        .webcam-section {
+            margin-bottom: 25px;
+        }
+        .webcam-btn {
+            width: 100%;
+            padding: 20px;
+            font-size: 1.2em;
+        }
+        
+        /* Video Grid */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .video-card {
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            text-decoration: none;
+            color: inherit;
+        }
+        .video-card:hover {
+            transform: translateY(-5px);
+            border-color: #3498db;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .video-card .thumbnail {
+            width: 100%;
+            height: 160px;
+            background: #1a1a2e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            color: #3498db;
+        }
+        .video-card .info {
+            padding: 15px;
+        }
+        .video-card .name {
+            font-weight: 500;
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .video-card .meta {
+            font-size: 0.85em;
+            color: #95a5a6;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .stat-card {
+            background: rgba(0,0,0,0.2);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 2em;
+            font-weight: 700;
+            color: #3498db;
+        }
+        .stat-label {
+            font-size: 0.85em;
+            color: #95a5a6;
+            margin-top: 5px;
+        }
+        .stat-card.danger .stat-value { color: #e74c3c; }
+        .stat-card.warning .stat-value { color: #f39c12; }
+        .stat-card.success .stat-value { color: #2ecc71; }
+        
+        /* Recent Events */
+        .events-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .event-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+        .event-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+        }
+        .event-icon.violence { background: rgba(231, 76, 60, 0.2); }
+        .event-icon.loitering { background: rgba(243, 156, 18, 0.2); }
+        .event-icon.running { background: rgba(52, 152, 219, 0.2); }
+        .event-icon.intrusion { background: rgba(155, 89, 182, 0.2); }
+        .event-details {
+            flex: 1;
+        }
+        .event-type {
+            font-weight: 500;
+            text-transform: capitalize;
+        }
+        .event-time {
+            font-size: 0.8em;
+            color: #95a5a6;
+        }
+        .no-events {
+            text-align: center;
+            padding: 30px;
+            color: #7f8c8d;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🛡️ AI Video Surveillance System</h1>
+            <p class="subtitle">Intelligent Real-time Abnormal Activity Detection</p>
+            <div class="status-bar">
+                <div class="status-item">
+                    <span class="status-dot {{ 'active' if yolo_enabled else 'inactive' }}"></span>
+                    <span>YOLO Detection</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-dot {{ 'active' if alert_configured else 'warning' }}"></span>
+                    <span>Email Alerts</span>
+                </div>
+                <div class="status-item">
+                    <span class="status-dot active"></span>
+                    <span>System Online</span>
+                </div>
+            </div>
+        </header>
+        
+        <div class="main-grid">
+            <div class="content">
+                <!-- Webcam Section -->
+                <div class="section webcam-section">
+                    <a href="{{ url_for('webcam_view') }}" class="btn btn-danger webcam-btn">
+                        📹 Start Live Webcam Detection
+                    </a>
+                </div>
+                
+                <!-- Upload Section -->
+                <div class="section">
+                    <h2 class="section-title">📤 Upload Video for Analysis</h2>
+                    <form class="upload-form" method="POST" enctype="multipart/form-data" action="{{ url_for('upload_video') }}">
+                        <div class="file-input-wrapper">
+                            <div class="icon">🎬</div>
+                            <div>Drag & drop video file or click to browse</div>
+                            <div style="font-size: 0.85em; color: #7f8c8d; margin-top: 8px;">
+                                Supported: MP4, AVI, MOV, MKV, WebM
+                            </div>
+                            <input type="file" name="video_file" accept="video/*" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            🔍 Upload & Analyze
+                        </button>
+                    </form>
+                </div>
+                
+                <!-- Uploaded Videos -->
+                <div class="section" style="margin-top: 25px;">
+                    <h2 class="section-title">🎥 Uploaded Videos</h2>
+                    {% if uploaded_videos %}
+                    <div class="video-grid">
+                        {% for video in uploaded_videos %}
+                        <a href="{{ url_for('single_uploaded_video', filename=video) }}" class="video-card">
+                            <div class="thumbnail">🎬</div>
+                            <div class="info">
+                                <div class="name">{{ video }}</div>
+                                <div class="meta">Click to analyze</div>
+                            </div>
+                        </a>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="no-events">
+                        <p>No videos uploaded yet. Upload a video to get started!</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="sidebar">
+                <!-- Stats Section -->
+                <div class="section">
+                    <h2 class="section-title">📊 Detection Stats (7 Days)</h2>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value">{{ stats.total_events|default(0) }}</div>
+                            <div class="stat-label">Total Events</div>
+                        </div>
+                        <div class="stat-card danger">
+                            <div class="stat-value">{{ stats.by_type.violence|default(0) }}</div>
+                            <div class="stat-label">Violence</div>
+                        </div>
+                        <div class="stat-card warning">
+                            <div class="stat-value">{{ stats.by_type.loitering|default(0) }}</div>
+                            <div class="stat-label">Loitering</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">{{ stats.by_type.running|default(0) }}</div>
+                            <div class="stat-label">Running</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recent Events -->
+                <div class="section">
+                    <h2 class="section-title">🔔 Recent Alerts</h2>
+                    <div class="events-list">
+                        {% if stats.recent_events %}
+                            {% for event in stats.recent_events[:5] %}
+                            <div class="event-item">
+                                <div class="event-icon {{ event.activity_type }}">
+                                    {% if event.activity_type == 'violence' %}⚠️
+                                    {% elif event.activity_type == 'loitering' %}🚶
+                                    {% elif event.activity_type == 'running' %}🏃
+                                    {% elif event.activity_type == 'intrusion' %}🚫
+                                    {% else %}📌{% endif %}
+                                </div>
+                                <div class="event-details">
+                                    <div class="event-type">{{ event.activity_type }}</div>
+                                    <div class="event-time">{{ event.timestamp }}</div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="no-events">
+                                <p>No recent alerts</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Email Config Status -->
+                <div class="section">
+                    <h2 class="section-title">✉️ Email Alerts</h2>
+                    {% if alert_configured %}
+                    <p style="color: #2ecc71;">✓ Email alerts are configured</p>
+                    {% else %}
+                    <p style="color: #f39c12;">⚠ Configure SMTP in settings.yaml</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            AI-Based Intelligent Video Surveillance System | Powered by YOLO + CLIP + OpenCV
+        </footer>
+    </div>
+</body>
+</html>

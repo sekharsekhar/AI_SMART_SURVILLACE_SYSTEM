@@ -1,0 +1,33 @@
+# Violence Detection - Python 3.10+ Compatible Dependencies
+
+# Core ML/DL packages
+numpy>=1.23.0,<2.0
+torch>=2.0.0
+torchvision>=0.15.0
+
+# OpenAI CLIP (install from GitHub)
+git+https://github.com/openai/CLIP.git
+
+# Computer Vision & Image Processing
+opencv-python>=4.8.0
+Pillow>=9.5.0
+matplotlib>=3.7.0
+
+# Web Framework
+flask>=2.3.0
+werkzeug>=2.3.0
+
+# Configuration
+pyyaml>=6.0
+
+# YOLOv8 for person/object detection
+ultralytics>=8.0.0
+
+# Object tracking
+scipy>=1.10.0
+
+# Database
+sqlalchemy>=2.0.0
+
+# Environment variables (optional)
+python-dotenv>=1.0.0

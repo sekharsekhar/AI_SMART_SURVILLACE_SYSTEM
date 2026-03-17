@@ -1,0 +1,111 @@
+model-settings:
+  prediction-threshold: 0.18  # Lowered for better violence detection sensitivity
+  model-name: 'ViT-B/32'
+  device: 'cpu'
+
+# YOLOv8 Settings
+yolo-settings:
+  model: 'yolov8n.pt'  # Options: yolov8n.pt, yolov8s.pt, yolov8m.pt
+  confidence-threshold: 0.5
+  classes: [0]  # 0 = person in COCO dataset
+
+# Object Tracking Settings  
+tracking-settings:
+  max-disappeared: 30  # Frames before object is deregistered
+  max-distance: 100    # Max centroid distance for matching
+  trajectory-length: 50  # Number of positions to store
+
+# Activity Detection Settings
+detection-settings:
+  violence:
+    enabled: true
+    threshold: 0.2  # Lowered for better detection sensitivity
+  intrusion:
+    enabled: true
+  loitering:
+    enabled: true
+    time-threshold: 60  # Seconds before alerting
+    movement-threshold: 50  # Pixels
+  running:
+    enabled: true
+    speed-threshold: 15.0  # Pixels per frame
+    sustained-frames: 3
+  crowd:
+    enabled: true
+    density-threshold: 10      # Max persons before alert
+    gathering-threshold: 5     # Sudden increase trigger
+    dispersal-threshold: 5     # Sudden decrease trigger (panic)
+    time-window: 30            # Frames to analyze for trends
+
+# Zone Configuration (for intrusion detection)
+zones: []
+  # Example zone configuration:
+  # - name: "Restricted Area"
+  #   polygon: [[100,100], [400,100], [400,300], [100,300]]
+  #   enabled: true
+
+# SMTP Email Alert Settings
+alerts:
+  smtp:
+    enabled: true  # Email alerts enabled
+    host: "smtp.gmail.com"  # e.g., smtp.gmail.com
+    port: 587
+    use_tls: true
+    username: ""  # Your email address
+    password: ""  # App password WITHOUT spaces
+    from_address: ""  # Sender email
+    recipients:
+      - ""  # Alert recipient
+  cooldown_seconds: 30  # Minimum time between alerts of same type
+  attach_snapshot: true
+
+# Database Settings
+database:
+  path: "data/surveillance.db"
+  clear_after_days: 30  # Auto-delete old events
+
+label-settings:
+  labels: # labels that can be predicted if model's confidence is more than "prediction-threshold"
+    # Violence/Threat cases (prioritized)
+    - 'fight on a street'
+    - 'street violence'
+    - 'physical fight'
+    - 'people fighting'
+    - 'violent altercation'
+    - 'assault'
+    - 'punching'
+    - 'kicking'
+    - 'violence in office'
+    - 'fire on a street'
+    - 'fire in office'
+    - 'robbery'
+    - 'attack'
+    # Accident cases
+    - 'car crash'
+    - 'car accident'
+    - 'vehicle collision'
+    - 'road accident'
+    - 'traffic accident'
+    - 'motorcycle accident'
+    - 'pedestrian hit by car'
+    - 'car hitting pedestrian'
+    - 'vehicle crash'
+    - 'cars colliding'
+    # Normal outdoor cases
+    - 'people walking on a street'
+    - 'buildings'
+    - 'road'
+    - 'cars on a road'
+    - 'car parking area'
+    - 'cars'
+    # Normal indoor cases
+    - 'office environment'
+    - 'office corridor'
+    - 'people talking'
+    - 'people walking in office'
+    - 'person walking in office'
+    - 'group of people'
+  default-label: 'Unknown' # value to return if model's confidence is less than "prediction-threshold"
+
+
+
