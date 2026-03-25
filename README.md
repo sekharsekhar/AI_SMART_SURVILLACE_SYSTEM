@@ -8,15 +8,8 @@
 
 ## Hello There! Welcome to My Project 👋
 
-Hey! I'm **Krishna Nand Pathak**, and I'm really excited that you're here to learn about this project. 
 
-Let me be honest with you - when I first started learning about AI and computer vision, I found most tutorials and documentation really confusing. They used big words, assumed I knew things I didn't, and made everything feel way more complicated than it needed to be.
 
-So I promised myself: when I build something, I'll explain it the way I wished someone had explained it to me.
-
-**This guide is written for complete beginners.** Even if you've never written a line of code before, I want you to understand what this project does and how it works. We'll take it slow, step by step.
-
-Ready? Let's go! ☕
 
 ---
 
