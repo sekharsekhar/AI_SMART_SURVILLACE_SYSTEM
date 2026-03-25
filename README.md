@@ -3,9 +3,6 @@
 
 ---
 
-**Developer:** Krishna Nand Pathak  
-**Project Type:** Academic Project  
-**Last Updated:** February 2026
 
 ---
 
@@ -769,44 +766,19 @@ pip install --upgrade -r requirements.txt
 
 ---
 
-## What You've Learned Today
 
-Congratulations! You now understand:
-
-✅ What this surveillance system does and why it's useful  
-✅ How AI can watch videos and spot problems automatically  
-✅ How YOLO finds people in pictures  
-✅ How tracking remembers who's who  
-✅ How CLIP understands what's happening in a scene  
-✅ How loitering, running, and crowd detection work  
-✅ How the system sends email alerts  
-✅ How to set up and run the project  
 
 ---
 
-## Final Words
 
-When I started this project, I didn't know half of what I know now. I made mistakes. I broke things. I googled error messages at 2 AM.
 
-That's how learning works.
 
-Don't be intimidated by AI or computer vision. At its heart, this is all just:
-1. Look at a picture
-2. Ask simple questions about it
-3. Do something if the answer is concerning
 
-That's it. The fancy AI stuff is just a smarter way of asking those questions.
 
-If you get stuck, don't give up. Every programmer has been stuck. Every programmer has felt dumb. The difference is that good programmers keep going anyway.
-
-**Happy learning!** 🚀
 
 ---
 
-**Developer:** Krishna Nand Pathak  
-**Project:** AI Video Surveillance System  
-**Date:** February 2026
 
 ---
 
-*Remember: The best way to learn is by doing. Don't just read this - run the code, break it, fix it, change things and see what happens. That's how you become a real developer!*
+
